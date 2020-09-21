@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { Orgs } from './components/Orgs';
+import { Repos } from './components/Repos';
+import { User } from './components/User';
 import { getRepos, getUserData } from './github-api';
 
 
@@ -9,16 +12,16 @@ import { getRepos, getUserData } from './github-api';
 const userId = "millerjl1980"
 
 const App = () => {
-  
-  const [users, setUsers] = useState([]);
+
+  const [user, setUser] = useState([]);
   const [orgs, setOrgs] = useState([]);
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState([true]);
   
   useEffect(() => {
-      const fetchUsers = async () => {
+      const fetchUser = async () => {
         const userData = await getUserData([userId])
-        setUsers(userData['user'])
+        setUser(userData['user'])
         setLoading(false);
       }
 
@@ -33,15 +36,15 @@ const App = () => {
         setLoading(false);
       }
 
-      fetchUsers();
+      fetchUser();
       fetchRepos();
       fetchOrgs();
 
   }, []);
 
-  console.log(users)
-  console.log(repos)
-  console.log(orgs)
+  // console.log(user)
+  //console.log(repos)
+  // console.log(orgs)
 
   if (loading) {
     return <div className="container"><h2>Loading...</h2></div>;
@@ -50,6 +53,17 @@ const App = () => {
   return (
     <div className="container">
       <h1>My App</h1>
+      <User 
+        image= {user['avatar_url']}
+        name= {user['name']}
+        bio= {user['bio']}
+        followers= {user['followers']}
+      />
+      <h2>Organizations</h2>
+      <Orgs orgs={ orgs } />
+      <h2>Repositories</h2>
+      <Repos repos={ repos } />
+
     </div>
   );
 }
